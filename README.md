@@ -3,15 +3,19 @@
 ## Description
 This project is very early. But, the goal is to build a Raspberry Pi based MANET radio using Wifi Halow. The project is based on using Morse Micro based pi hats.
 
+I have a few optional components listed. I am currently testing an WaveShare 1850 UPS for power. I will include drivers for the USB Wifi adapter. The onboard one usually can't be used because it shares the same SDIO address as the halow boards.
+
 ## Roadmap
 * Enclosue Design
 * Step by Step instructions
+* Investigate USB OTG/ Ethernet Gadget to allow EUD's to connect without ethernet to USB adapters.
 
 ## In Progress
 * A script that uses GPSD to do range testing, saving GPS locations and RSSI/SNR to a file for reporting.
 * A PTT app to allow the radio to be functional without an EUD.
 * Support for Seed and other SDIO based boards
 * Raspberry Pi 3B+ and 2W support
+* External 2.5/5ghz WiFi for bridging
 
 | Item                                                                 | Link                                                                                                     | Optional |
 |----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|----------|
