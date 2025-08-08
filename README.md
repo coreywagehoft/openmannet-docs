@@ -9,6 +9,7 @@ I have a few optional components listed. I am currently testing an WaveShare 185
 * Enclosue Design
 * Step by Step instructions
 * Investigate USB OTG/ Ethernet Gadget to allow EUD's to connect without ethernet to USB adapters.
+* Test batman mesh
 
 ## In Progress
 * A script that uses GPSD to do range testing, saving GPS locations and RSSI/SNR to a file for reporting.
@@ -16,6 +17,40 @@ I have a few optional components listed. I am currently testing an WaveShare 185
 * Support for Seed and other SDIO based boards
 * Raspberry Pi 3B+ and 2W support
 * External 2.5/5ghz WiFi for bridging
+
+## Steps
+For some reason, the BCF is not getting copied to the image.
+
+1. Flash the image to a sd card
+2. Connect to the pi over 10.42.0.1, (you will need to set your laptop IP to something in this range like 10.42.0.100)
+3. For some reason, the BCF is not getting copied over. So you will need to SCP it over.
+    a. `scp  bcf_mf16858_fgh100mh_v6.3.0.bin root@10.42.0.1:/lib/firmware/morse`
+4. SSH to the pi
+    a. `ssh root@10.42.0.1`
+    b. Run the following commands to load the BCF for this board.
+```
+uci set wireless.radio0.bcf=bcf_mf16858_fgh100mh_v6.3.0.bin
+uci set wireless.radio0.enable_mcast_whitelist=0
+uci set wireless.radio0.enable_mcast_whitelist=0
+# Not sure if this actually affecting power output...
+uci set wireless.radio0.tx_max_power_mbm=2600
+uci commit
+reload_config
+reboot
+```
+5. Go to 10.42.0.1 in a browser
+6. Follow the steps in the [manual](https://www.morsemicro.com/wp-content/uploads/2024/12/MM6108-EKH01-Eval-Kit-User-Guide-v18.pdf) to configure the device. I would suggest the `802.11s Mesh Wizard`.
+7. The default build installs mediamtx (which may be useful for ATAK/UAS plugin video streams). But, it takes a ton of resources, so I disabled it for now.
+```
+/etc/init.d/mediamtx stop
+/etc/init.d/mediamtx disable
+```
+
+## GPS Range Script
+There is a range test script in the scripts folder. This uses the GPS module below to measure ping and RSSI/SNR. You will need to copy it to /root/, and do a `chmod +x rangetest.sh`. I have been using tmux to keep it running in the background.
+
+
+## Parts List
 
 | Item                                                                 | Link                                                                                                     | Optional |
 |----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|----------|
