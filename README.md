@@ -1,54 +1,51 @@
 # OpenMANET Project
 
 ## Description
-This project is very early. But, the goal is to build a Raspberry Pi based MANET radio using Wifi Halow. The project is based on using Morse Micro based pi hats.
+This project is still in its early stages, but the goal is to build a Raspberry Pi based MANET (Mobile Ad-Hoc Network) radio using a Wi-Fi HaLow module from Seeed. It is designed around Morse Micro based Pi HATs and other compatible SDIO boards.
 
-I have a few optional components listed. I am currently testing an WaveShare 1850 UPS for power. I will include drivers for the USB Wifi adapter. The onboard one usually can't be used because it shares the same SDIO address as the halow boards.
+A number of optional components are listed in the parts list below. Currently, I am testing a WaveShare 1850 UPS for power. The build includes drivers for the Panda Wireless PAU06 USB Wi-Fi adapter. The onboard Wi-Fi on most Raspberry Pis cannot be used for client networking in this setup because it shares the same SDIO address as the HaLow boards. You can use either the USB WiFi or the ethernet adapter on the RPI4 to bridge connectivity.
 
 ## Roadmap
-* Enclosue Design
-* Step by Step instructions
-* Investigate USB OTG/ Ethernet Gadget to allow EUD's to connect without ethernet to USB adapters.
-* Test batman mesh
+* Enclosure design  
+* Step-by-step setup guide  
+* Investigate USB OTG/Ethernet Gadget mode to allow EUDs to connect without USB-to-Ethernet adapters  
+* Test B.A.T.M.A.N. mesh networking  
 
 ## In Progress
-* A script that uses GPSD to do range testing, saving GPS locations and RSSI/SNR to a file for reporting.
-* A PTT app to allow the radio to be functional without an EUD.
-* Support for Seed and other SDIO based boards
-* Raspberry Pi 3B+ and 2W support
-* External 2.5/5ghz WiFi for bridging
+* GPS-based range-testing script using GPSD, logging GPS location, RSSI, and SNR for analysis  
+* PTT (Push-to-Talk) application so the radio is functional without an EUD  
+* Support for Seeed and other SDIO-based boards  
+* Raspberry Pi 3B+ and 2W support  
 
-## Steps
-For some reason, the BCF is not getting copied to the image.
+## Setup Steps
 
-1. Flash the image to a sd card
-2. Connect to the pi over 10.42.0.1, (you will need to set your laptop IP to something in this range like 10.42.0.100)
-3. For some reason, the BCF is not getting copied over. So you will need to SCP it over.
-    a. `scp  bcf_mf16858_fgh100mh_v6.3.0.bin root@10.42.0.1:/lib/firmware/morse`
-4. SSH to the pi
-    a. `ssh root@10.42.0.1`
-    b. Run the following commands to load the BCF for this board.
-```
-uci set wireless.radio0.bcf=bcf_mf16858_fgh100mh_v6.3.0.bin
-uci set wireless.radio0.enable_mcast_whitelist=0
-uci set wireless.radio0.enable_mcast_whitelist=0
-# Not sure if this actually affecting power output...
-uci set wireless.radio0.tx_max_power_mbm=2600
-uci commit
-reload_config
-reboot
-```
-5. Go to 10.42.0.1 in a browser
-6. Follow the steps in the [manual](https://www.morsemicro.com/wp-content/uploads/2024/12/MM6108-EKH01-Eval-Kit-User-Guide-v18.pdf) to configure the device. I would suggest the `802.11s Mesh Wizard`.
-7. The default build installs mediamtx (which may be useful for ATAK/UAS plugin video streams). But, it takes a ton of resources, so I disabled it for now.
-```
-/etc/init.d/mediamtx stop
-/etc/init.d/mediamtx disable
-```
+1. **Download the latest OpenMANET image**  
+   Go to the [Releases section](https://github.com/OpenMANET/openwrt/releases) on the project GitHub page and download the image for your Raspberry Pi model.
 
-## GPS Range Script
-There is a range test script in the scripts folder. This uses the GPS module below to measure ping and RSSI/SNR. You will need to copy it to /root/, and do a `chmod +x rangetest.sh`. I have been using tmux to keep it running in the background.
+2. **Flash the image to an SD card**  
+   Use the [official Raspberry Pi guide](https://www.raspberrypi.com/documentation/computers/getting-started.html) for instructions on flashing the image.
 
+3. **Initial connection**  
+   When first powered on, the Pi boots with a static IP of **10.42.0.1**.  
+   Connect your computer directly via Ethernet and set your computer to obtain an IP automatically. You must set a static IP address on your ethernet adapter(thats plugged into the pi) to `10.42.0.250` and you will be able to access the Pi at `10.42.0.1` in a web browser. If your computer is connected to WiFi, you can set the static IP on your ethernet adapter, and still stay connected to the internet at the same time.
+
+4. **Switch to DHCP for normal operation**  
+   After completing the initial configuration, it is recommended to set each node to use DHCP. This allows the Pi to automatically obtain an IP address from any connected network without manual configuration.  
+   I have tested this successfully with my local home network and with a Starlink Mini providing DHCP.
+
+5. **Initial configuration**  
+   Follow the steps in the [Morse Micro EKH01 User Guide](https://www.morsemicro.com/wp-content/uploads/2024/12/MM6108-EKH01-Eval-Kit-User-Guide-v18.pdf).  
+   It is recommended to complete **Section 3.1 “Initial Setup”** first, then **Section 3.9 “802.11s Mesh Configuration”** to establish your initial mesh link.
+
+## GPS Range Testing Script
+A range-test script is included in the `scripts` folder. It uses the GPS module listed in the parts list to measure ping, RSSI, and SNR. You can use SCP to transfer the file to the pi.
+
+To use it:
+```bash
+cp scripts/rangetest.sh /root/
+chmod +x /root/rangetest.sh
+```
+It is recommended to run it inside `tmux` so it continues running even if you disconnect.
 
 ## Parts List
 
@@ -56,10 +53,18 @@ There is a range test script in the scripts folder. This uses the GPS module bel
 |----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|----------|
 | Wio WM6180 Wi-Fi HaLow mini PCIe Module                              | https://www.seeedstudio.com/Wio-WM6180-Wi-Fi-HaLow-mini-PCIe-Module-p-6394.html                         | No       |
 | WM1302 Pi Hat                                                        | https://www.seeedstudio.com/WM1302-Pi-Hat-p-4897.html                                                   | No       |
-| External Antenna 868/915MHz 2dBi SMA L195mm Foldable                 | https://www.seeedstudio.com/External-Antenna-868-915MHZ-2dBi-SMA-L195mm-Foldable-p-5863.html            | No       |
-| UF.L to SMA-K 1.13 120mm Cable                                       | https://www.seeedstudio.com/UF-L-SMA-K-1-13-120mm-p-5046.html                                           | No       |
-| Raspberry Pi 4 Computer Model B - 1GB                                | https://www.seeedstudio.com/Raspberry-Pi-4-Computer-Model-B-1GB-p-4078.html                             | No       |
-| 18500 Battteries                                                     | https://www.amazon.com/dp/B0D3GX96H6?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_4                       | Yes      |
+| External Antenna 868/915 MHz 2 dBi SMA L195 mm Foldable              | https://www.seeedstudio.com/External-Antenna-868-915MHZ-2dBi-SMA-L195mm-Foldable-p-5863.html            | No       |
+| UF.L to SMA-K 1.13 mm 120 mm Cable                                   | https://www.seeedstudio.com/UF-L-SMA-K-1-13-120mm-p-5046.html                                           | No       |
+| Raspberry Pi 4 Computer Model B – 1 GB                               | https://www.seeedstudio.com/Raspberry-Pi-4-Computer-Model-B-1GB-p-4078.html                             | No       |
+| 18500 Batteries                                                      | https://www.amazon.com/dp/B0D3GX96H6?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_4                       | Yes      |
 | WaveShare UPS B                                                      | https://www.amazon.com/gp/product/B0D39VDMDP/ref=ox_sc_saved_title_1?smid=A3B0XDFTVR980O&psc=1          | Yes      |
-| Panda USB Wifi Adapter                                               | https://www.amazon.com/dp/B00762YNMG?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_1                       | Yes      |
+| Panda USB Wi-Fi Adapter (PAU06)                                      | https://www.amazon.com/dp/B00762YNMG?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_1                       | Yes      |
 | GPS USB Adapter                                                      | https://www.amazon.com/dp/B01MTU9KTF?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_1                       | Yes      |
+
+
+## Project Photos
+
+![Setup photo 1](pics/IMG_8358.jpg)
+![Setup photo 2](pics/IMG_8359.jpg)
+![Setup photo 3](pics/IMG_8360.jpg)
+![Setup photo 4](pics/IMG_8362.jpg)
