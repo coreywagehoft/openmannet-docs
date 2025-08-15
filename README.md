@@ -35,7 +35,7 @@ A number of optional components are listed in the parts list below. Currently, I
    Connect your computer directly via Ethernet and set your computer to obtain an IP automatically. You must set a static IP address on your ethernet adapter(thats plugged into the pi) to `10.42.0.250` and you will be able to access the Pi at `10.42.0.1` in a web browser. If your computer is connected to WiFi, you can set the static IP on your ethernet adapter, and still stay connected to the internet at the same time.
 
 4. **Switch to DHCP for normal operation**  
-   After completing the initial configuration, it is recommended to set each node to use DHCP. This allows the Pi to automatically obtain an IP address from any connected network without manual configuration.  
+   After completing the initial configuration, OpenWrt will set the nodes to use DHCP. This allows the Pi to automatically obtain an IP address from any connected network without manual configuration. If you are using these in a disconnected environment, it may make sense to set static IP addresses on the radios, and your EUDs.
    I have tested this successfully with my local home network and with a Starlink Mini providing DHCP.
 
 5. **Initial configuration**  
