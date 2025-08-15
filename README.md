@@ -25,7 +25,7 @@ A number of optional components are listed in the parts list below. Currently, I
 ## Setup Steps
 
 1. **Download the latest OpenMANET image**  
-   Go to the [Releases section](https://github.com/OpenMANET/openwrt/releases) on the project GitHub page and download the image for your Raspberry Pi model.
+   Go to the [Releases section](https://github.com/OpenMANET/openwrt/releases) on the project GitHub page and download the image.
 
 2. **Flash the image to an SD card**  
    Use the [official Raspberry Pi guide](https://www.raspberrypi.com/documentation/computers/getting-started.html) for instructions on flashing the image.
