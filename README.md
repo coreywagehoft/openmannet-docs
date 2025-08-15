@@ -17,6 +17,11 @@ A number of optional components are listed in the parts list below. Currently, I
 * Support for Seeed and other SDIO-based boards  
 * Raspberry Pi 3B+ and 2W support  
 
+## Advantages to using this over the Seeed image
+* The BCF file is different, so the power goes from 21dbm to 27dbm
+* The build is newer than the Seeed image
+* The build includes 802.11s support
+
 ## Setup Steps
 
 1. **Download the latest OpenMANET image**  
@@ -36,6 +41,13 @@ A number of optional components are listed in the parts list below. Currently, I
 5. **Initial configuration**  
    Follow the steps in the [Morse Micro EKH01 User Guide](https://www.morsemicro.com/wp-content/uploads/2024/12/MM6108-EKH01-Eval-Kit-User-Guide-v18.pdf).  
    It is recommended to complete **Section 3.1 “Initial Setup”** first, then **Section 3.9 “802.11s Mesh Configuration”** to establish your initial mesh link.
+
+## Mediamtx disable
+The default build installs mediamtx (which may be useful for ATAK/UAS plugin video streams). But, it takes a ton of resources, I will be removing this from the base build. But, to disable it now ssh into the pi, and run the following commands.
+```
+/etc/init.d/mediamtx stop
+/etc/init.d/mediamtx disable
+```
 
 ## GPS Range Testing Script
 A range-test script is included in the `scripts` folder. It uses the GPS module listed in the parts list to measure ping, RSSI, and SNR. You can use SCP to transfer the file to the pi.
