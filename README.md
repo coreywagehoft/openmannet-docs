@@ -123,7 +123,7 @@ Notes:
 ---
 
 ## Notes for disconnected environments
-In situations without DHCP, you can configure static IPs. The DHCP range is `192.168.12.100` to `192.168.12.255`, so make sure you assign your IPs in this range. I would start with `192.168.12.2`.
+In situations without DHCP, you can configure static IPs. The DHCP range is `192.168.12.100` to `192.168.12.255`, so make sure you assign your IPs outside of this range. I would start with `192.168.12.2`.
 - On your EUD (end-user device), assign a static IP in the mesh subnet to avoid losing connectivity if DHCP isn’t available.
 - On your Raspberry Pi radios, go to Quick Config in the UI, and set a static IP on the `ahwlan` interface. You can find the currently assigned IP from your DHCP server and then convert it to static.
 
