@@ -36,7 +36,7 @@ A number of optional components are listed in the parts list below. Currently, I
    Connect your computer directly via Ethernet and set your computer to obtain an IP automatically.
    Your computer should get an IP address in that range from the Pi and you will be able to access the Pi at 10.42.0.1 in a web browser.
    The default username is `root`, and the default password is blank.
-   If your computer is connected to WiFi, you can plug the RPI into your ethernet adapter, and still stay connected to the internet at the same time.
+   If your computer is connected to WiFi, you can plug the RPI into your ethernet adapter, and still stay connected to the internet at the same time. *Note the username is still root after running the initial wizard, and you will use the password you set.*
 
 4. **Initial configuration**
    Follow the steps in the Morse Micro EKH01 User Guide:
@@ -65,6 +65,8 @@ Think of a Mesh Gate as the “hub” of your mesh. It is the point where your n
 ### Mesh Point
 A Mesh Point is a node that connects to the 802.11s mesh. It can bridge its Ethernet or 2.4/5 GHz Wi-Fi interface into the HaLow mesh.
 Recommendation: For the first-time setup, do NOT enable bridging on the Mesh Point. This makes it easier to confirm connectivity by checking the Mesh Gate first. Once you verify the Mesh Point is joining the mesh, rerun the wizard and enable bridging. If your node does not connect over Halow, you will not be able to connect without connecting physically.
+
+The Mesh Point you will want to use bridge mode as well, so that you are on the same network as the other EUDs.
 
 ---
 
@@ -148,7 +150,7 @@ It is recommended to run it inside `tmux` so it continues running even if you di
 | External Antenna 868/915 MHz 2 dBi SMA L195 mm Foldable              | https://www.seeedstudio.com/External-Antenna-868-915MHZ-2dBi-SMA-L195mm-Foldable-p-5863.html            | No       |
 | UF.L to SMA-K 1.13 mm 120 mm Cable                                   | https://www.seeedstudio.com/UF-L-SMA-K-1-13-120mm-p-5046.html                                           | No       |
 | Raspberry Pi 4 Computer Model B – 1 GB                               | https://www.seeedstudio.com/Raspberry-Pi-4-Computer-Model-B-1GB-p-4078.html                             | No       |
-| 18500 Batteries                                                      | https://www.amazon.com/dp/B0D3GX96H6?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_4                       | Yes      |
+| 21700 Batteries                                                      | https://www.amazon.com/dp/B0D3GX96H6?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_4                       | Yes      |
 | WaveShare UPS B                                                      | https://www.amazon.com/gp/product/B0D39VDMDP/ref=ox_sc_saved_title_1?smid=A3B0XDFTVR980O&psc=1          | Yes      |
 | Panda USB Wi-Fi Adapter (PAU06)                                      | https://www.amazon.com/dp/B00762YNMG?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_1                       | Yes      |
 | GPS USB Adapter                                                      | https://www.amazon.com/dp/B01MTU9KTF?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_1                       | Yes      |
