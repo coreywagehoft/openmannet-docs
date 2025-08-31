@@ -4,12 +4,12 @@
 # killall gpsd 2>/dev/null
 # dmesg | grep tty
 # this should should a device name like below.
-# gpsd /dev/ttyACM0 -F /var/run/gpsd.sock
+gpsd /dev/ttyACM0 -F /var/run/gpsd.sock
 
 # === Config ===
 IFNAME="mesh0"
 PING_IP="192.168.1.1"
-OUTDIR="/tmp/distance"
+OUTDIR="/root/distance"
 TS_FILE=$(date +%Y%m%d-%H%M%S)
 CSV="$OUTDIR/$TS_FILE.csv"
 
