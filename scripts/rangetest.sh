@@ -1,13 +1,13 @@
 #!/bin/sh
 
 # If this doesnt work, gps might be using the wrong device.
-# killall gpsd 2>/dev/null
+killall gpsd 2>/dev/null
 # dmesg | grep tty
 # this should should a device name like below.
 gpsd /dev/ttyACM0 -F /var/run/gpsd.sock
 
 # === Config ===
-IFNAME="mesh0"
+IFNAME="wlan0"
 PING_IP="192.168.1.1"
 OUTDIR="/root/distance"
 TS_FILE=$(date +%Y%m%d-%H%M%S)
@@ -38,10 +38,16 @@ while true; do
 
     # === Get Signal and Noise ===
     STATS=$(morse_cli -i "$IFNAME" stats)
-    RSSI=$(echo "$STATS" | grep "Received Power (dBm)" | awk -F':' '{print $2}' | xargs)
-    NOISE=$(echo "$STATS" | grep "Noise dBm" | awk -F':' '{print $2}' | xargs)
-    SNR=$(( RSSI - NOISE ))
 
+    # case-insensitive, robust to spacing; extract the numeric value after the colon
+    RSSI=$(printf "%s\n" "$STATS" | awk -F':' 'tolower($0) ~ /received[[:space:]]+power[[:space:]]*\(dbm\)/ {gsub(/^[ \t]+|[ \t]+$/,"",$2); print $2; exit}')
+    NOISE=$(printf "%s\n" "$STATS" | awk -F':' 'tolower($0) ~ /^[[:space:]]*noise[[:space:]]*\(dbm\)/      {gsub(/^[ \t]+|[ \t]+$/,"",$2); print $2; exit}')
+
+if [ -n "$RSSI" ] && [ -n "$NOISE" ]; then
+    SNR=$(( RSSI - NOISE ))
+else
+    SNR=""
+fi
     # === Get TX/RX MCS ===
     TX_MCS=$(iw dev "$IFNAME" station dump 2>/dev/null | grep "tx bitrate" | grep -oE 'MCS [0-9]+' | head -n1 | cut -d' ' -f2)
     RX_MCS=$(iw dev "$IFNAME" station dump 2>/dev/null | grep "rx bitrate" | grep -oE 'MCS [0-9]+' | head -n1 | cut -d' ' -f2)
