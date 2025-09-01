@@ -21,7 +21,7 @@ A number of optional components are listed in the parts list below. Currently, I
 * The BCF file is different, so the power goes from 21 dBm to 27 dBm
 * The build is newer than the Seeed image
 * The build includes 802.11s support
-* 📄 [Range Testing Results](./docs/Range%20Testing/README.md)
+* 📄 [Range Testing Results](./Range%20Testing/README.md)
 
 ## Setup Steps
 
